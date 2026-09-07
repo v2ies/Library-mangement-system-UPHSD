@@ -1,12 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 52" width="48" height="52">
-  <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#7a0c0c"/>
-      <stop offset="100%" style="stop-color:#4a0a15"/>
-    </linearGradient>
-  </defs>
-  <path d="M24 2 L44 10 V28 C44 40 24 50 24 50 C24 50 4 40 4 28 V10 Z" fill="url(#g)" stroke="#a9812f" stroke-width="1.8"/>
-  <path d="M14 18 H34 V36 H14 Z" fill="none" stroke="#f4e9cd" stroke-width="2"/>
-  <path d="M24 18 V36" stroke="#f4e9cd" stroke-width="1.6"/>
-  <path d="M14 23 H34 M14 28 H34 M14 33 H34" stroke="#f4e9cd" stroke-width="1" opacity="0.75"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 48" width="280" height="48">
+  <!-- Official-style seal -->
+  <circle cx="24" cy="24" r="21" fill="#6e1220"/>
+  <circle cx="24" cy="24" r="18" fill="#f4e9cd"/>
+  <circle cx="24" cy="24" r="15" fill="#6e1220"/>
+  <!-- Marian / figure motif -->
+  <circle cx="24" cy="19" r="5.5" fill="#f4e9cd"/>
+  <path d="M24 25 L24 34 M19.5 29 L28.5 29" stroke="#f4e9cd" stroke-width="2" stroke-linecap="round"/>
+  <path d="M18 35 Q24 39 30 35" fill="none" stroke="#a9812f" stroke-width="1.4"/>
+  <circle cx="24" cy="24" r="17" fill="none" stroke="#a9812f" stroke-width="1.2"/>
+  <!-- Wordmark -->
+  <text x="54" y="20" font-family="Georgia, 'Times New Roman', Times, serif" font-size="12.5" font-weight="700" fill="#6e1220" letter-spacing="0.8">UNIVERSITY OF PERPETUAL HELP</text>
+  <text x="54" y="36" font-family="Georgia, 'Times New Roman', Times, serif" font-size="11" font-weight="600" fill="#6e1220" letter-spacing="0.4">SYSTEM DALTA · Molino Campus</text>
 </svg>
