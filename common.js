@@ -74,24 +74,31 @@ function refreshCategorySelects() {
   var bookFilter = document.getElementById('bookCatFilter');
   var stuFilter = document.getElementById('stuCatFilter');
   var bCat = document.getElementById('bCategory');
+
   if (bookFilter) {
     var cur = bookFilter.value;
     var html = '<option value="">All Categories</option>';
-    for (var i = 0; i < cats.length; i++) html += '<option>' + esc(cats[i]) + '</option>';
+    for (var i = 0; i < cats.length; i++) {
+      html += '<option>' + esc(cats[i]) + '</option>';
+    }
     bookFilter.innerHTML = html;
     if (cats.indexOf(cur) !== -1) bookFilter.value = cur;
   }
   if (stuFilter) {
     var cur2 = stuFilter.value;
     var html2 = '<option value="">All Categories</option>';
-    for (var i = 0; i < cats.length; i++) html2 += '<option>' + esc(cats[i]) + '</option>';
+    for (var i = 0; i < cats.length; i++) {
+      html2 += '<option>' + esc(cats[i]) + '</option>';
+    }
     stuFilter.innerHTML = html2;
     if (cats.indexOf(cur2) !== -1) stuFilter.value = cur2;
   }
   if (bCat) {
     var cur3 = bCat.value;
     var html3 = '';
-    for (var i = 0; i < cats.length; i++) html3 += '<option>' + esc(cats[i]) + '</option>';
+    for (var i = 0; i < cats.length; i++) {
+      html3 += '<option>' + esc(cats[i]) + '</option>';
+    }
     bCat.innerHTML = html3;
     if (cats.indexOf(cur3) !== -1) bCat.value = cur3;
   }
@@ -110,13 +117,17 @@ function loadSession() {
 
 function saveSession(s) {
   session = s || { role: null, studentId: null };
-  try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(session)); } catch (e) {}
+  try {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  } catch (e) {}
 }
 
 var session = loadSession();
 
 function flashToast(title, desc) {
-  try { sessionStorage.setItem(FLASH_KEY, JSON.stringify({ title: title, desc: desc })); } catch (e) {}
+  try {
+    sessionStorage.setItem(FLASH_KEY, JSON.stringify({ title: title, desc: desc }));
+  } catch (e) {}
 }
 
 function showFlashToast() {
@@ -133,7 +144,9 @@ function refreshOverdue() {
   var todayStr = today();
   for (var i = 0; i < DB.records.length; i++) {
     var r = DB.records[i];
-    if (r.status === 'borrowed' && r.dueDate && r.dueDate < todayStr) r.status = 'overdue';
+    if (r.status === 'borrowed' && r.dueDate && r.dueDate < todayStr) {
+      r.status = 'overdue';
+    }
   }
   save();
 }
@@ -145,18 +158,35 @@ function toast(title, desc, isError) {
   el.className = 'toast' + (isError ? ' error' : '');
   el.innerHTML = '<strong>' + esc(title) + '</strong>' + (desc ? '<span>' + esc(desc) + '</span>' : '');
   wrap.appendChild(el);
-  setTimeout(function () { el.remove(); }, 3000);
+  setTimeout(function () {
+    el.remove();
+  }, 3000);
 }
 
 function esc(s) {
   if (s == null) return '';
-  return String(s).replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>').replace(/"/g, '"').replace(/'/g, '&#39;');
+  return String(s)
+    .replace(/&/g, '&')
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
+    .replace(/"/g, '"')
+    .replace(/'/g, '&#39;');
 }
 
-function openModal(id) { var m = document.getElementById(id); if (m) m.classList.add('open'); }
-function closeModal(id) { var m = document.getElementById(id); if (m) m.classList.remove('open'); }
+function openModal(id) {
+  var m = document.getElementById(id);
+  if (m) m.classList.add('open');
+}
+
+function closeModal(id) {
+  var m = document.getElementById(id);
+  if (m) m.classList.remove('open');
+}
+
 document.querySelectorAll('.overlay').forEach(function (m) {
-  m.addEventListener('click', function (e) { if (e.target === m) m.classList.remove('open'); });
+  m.addEventListener('click', function (e) {
+    if (e.target === m) m.classList.remove('open');
+  });
 });
 
 function openConfirm(title, desc, cb) {
@@ -164,13 +194,23 @@ function openConfirm(title, desc, cb) {
   var d = document.getElementById('confirmDesc');
   var ok = document.getElementById('confirmOk');
   var ov = document.getElementById('confirmOverlay');
-  if (!t || !d || !ok || !ov) { cb(); return; }
+  if (!t || !d || !ok || !ov) {
+    cb();
+    return;
+  }
   t.textContent = title;
   d.textContent = desc;
-  ok.onclick = function () { cb(); closeConfirm(); };
+  ok.onclick = function () {
+    cb();
+    closeConfirm();
+  };
   ov.classList.add('open');
 }
-function closeConfirm() { var ov = document.getElementById('confirmOverlay'); if (ov) ov.classList.remove('open'); }
+
+function closeConfirm() {
+  var ov = document.getElementById('confirmOverlay');
+  if (ov) ov.classList.remove('open');
+}
 
 var CAT_STYLES = {
   Fiction: { badge: 'b-fic', color: '#8a4b06' },
@@ -183,7 +223,9 @@ var CUSTOM_COLORS = ['#b3261e', '#8a6a00', '#1f6b41', '#6b3fa0', '#1a4b8f', '#0e
 function catStyle(cat) {
   if (CAT_STYLES[cat]) return CAT_STYLES[cat];
   var hash = 0;
-  for (var i = 0; i < cat.length; i++) hash = cat.charCodeAt(i) + ((hash << 5) - hash);
+  for (var i = 0; i < cat.length; i++) {
+    hash = cat.charCodeAt(i) + ((hash << 5) - hash);
+  }
   var color = CUSTOM_COLORS[Math.abs(hash) % CUSTOM_COLORS.length];
   CAT_STYLES[cat] = { badge: '', color: color };
   return CAT_STYLES[cat];
@@ -196,8 +238,13 @@ function statusBadge(s) {
   return '<span class="badge b-borrowed">Borrowed</span>';
 }
 
-function today() { return new Date().toISOString().slice(0, 10); }
-function plusDays(n) { return new Date(Date.now() + n * 86400000).toISOString().slice(0, 10); }
+function today() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function plusDays(n) {
+  return new Date(Date.now() + n * 86400000).toISOString().slice(0, 10);
+}
 
 function formatSid(input) {
   var v = input.value.replace(/\D/g, '').slice(0, 9);
@@ -206,12 +253,21 @@ function formatSid(input) {
   if (v.length > 6) out += '-' + v.slice(6, 9);
   input.value = out;
 }
-function validSid(sid) { return /^25-\d{4}-\d{3}$/.test(sid); }
-function validPassword(pw) { return typeof pw === 'string' && pw.length >= 6; }
+
+function validSid(sid) {
+  return /^25-\d{4}-\d{3}$/.test(sid);
+}
+
+function validPassword(pw) {
+  return typeof pw === 'string' && pw.length >= 6;
+}
 
 function avatarHTML(name, photo, size, fontSize) {
-  size = size || 38; fontSize = fontSize || 14;
-  if (photo) return '<div class="avatar" style="width:' + size + 'px;height:' + size + 'px;padding:0;overflow:hidden"><img src="' + photo + '" alt="' + esc(name) + '" style="width:100%;height:100%;object-fit:cover"></div>';
+  size = size || 38;
+  fontSize = fontSize || 14;
+  if (photo) {
+    return '<div class="avatar" style="width:' + size + 'px;height:' + size + 'px;padding:0;overflow:hidden"><img src="' + photo + '" alt="' + esc(name) + '" style="width:100%;height:100%;object-fit:cover"></div>';
+  }
   var letter = (name || '?')[0].toUpperCase();
   return '<div class="avatar" style="width:' + size + 'px;height:' + size + 'px;font-size:' + fontSize + 'px">' + esc(letter) + '</div>';
 }
@@ -224,7 +280,10 @@ function showScreen(id) {
   }
   var target = document.getElementById(id);
   if (!target) {
-    if (id === 'screen-admin' || id === 'screen-admin-login' || id === 'screen-admin-landing') { window.location.href = 'admin.html'; return; }
+    if (id === 'screen-admin' || id === 'screen-admin-login' || id === 'screen-admin-landing') {
+      window.location.href = 'admin.html';
+      return;
+    }
     window.location.href = 'index.html';
     return;
   }
@@ -234,28 +293,47 @@ function showScreen(id) {
 
 function goLanding() {
   saveSession({ role: null, studentId: null });
-  if (document.getElementById('screen-landing')) showScreen('screen-landing');
-  else window.location.href = 'index.html';
+  if (document.getElementById('screen-landing')) {
+    showScreen('screen-landing');
+  } else {
+    window.location.href = 'index.html';
+  }
 }
+
 function goAdminLogin() {
   if (document.getElementById('screen-admin-login')) {
     var e = document.getElementById('adminErr');
     if (e) e.classList.add('hidden');
     showScreen('screen-admin-login');
-  } else window.location.href = 'admin.html';
-}
-function chooseRole(role) {
-  if (role === 'admin') goAdminLogin();
-  else {
-    if (document.getElementById('screen-student-gate')) { switchGate('login'); showScreen('screen-student-gate'); }
-    else window.location.href = 'index.html';
+  } else {
+    window.location.href = 'admin.html';
   }
 }
+
+function chooseRole(role) {
+  if (role === 'admin') {
+    goAdminLogin();
+  } else {
+    if (document.getElementById('screen-student-gate')) {
+      switchGate('login');
+      showScreen('screen-student-gate');
+    } else {
+      window.location.href = 'index.html';
+    }
+  }
+}
+
 function logout() {
   saveSession({ role: null, studentId: null });
-  if (document.getElementById('screen-landing')) { showScreen('screen-landing'); toast('Logged out', 'You have been signed out.'); }
-  else if (document.getElementById('screen-admin-landing')) { showScreen('screen-admin-landing'); toast('Logged out', 'You have been signed out.'); }
-  else window.location.href = 'index.html';
+  if (document.getElementById('screen-landing')) {
+    showScreen('screen-landing');
+    toast('Logged out', 'You have been signed out.');
+  } else if (document.getElementById('screen-admin-landing')) {
+    showScreen('screen-admin-landing');
+    toast('Logged out', 'You have been signed out.');
+  } else {
+    window.location.href = 'index.html';
+  }
 }
 
 function emptyBox(icon, title, sub) {
@@ -270,13 +348,25 @@ function emptyBox(icon, title, sub) {
   return '<div class="empty"><svg width="42" height="42" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">' + path + '</svg><p>' + esc(title) + '</p><span>' + esc(sub) + '</span></div>';
 }
 
-function val(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
-function showErr(el, msg) { if (!el) return; el.textContent = msg; el.classList.remove('hidden'); }
+function val(id) {
+  var el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+
+function showErr(el, msg) {
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.remove('hidden');
+}
 
 window.addEventListener('storage', function (e) {
   if (!e) return;
   if (e.key === STORE_KEY) {
-    try { DB = load(); } catch (err) { return; }
+    try {
+      DB = load();
+    } catch (err) {
+      return;
+    }
     refreshOverdue();
     refreshCategorySelects();
     try {
@@ -293,7 +383,9 @@ window.addEventListener('storage', function (e) {
         updateReqBadge();
       }
       var stuEl = document.getElementById('screen-student');
-      if (stuEl && !stuEl.classList.contains('hidden') && session.role === 'student' && studentById(session.studentId)) renderStudentPortal();
+      if (stuEl && !stuEl.classList.contains('hidden') && session.role === 'student' && studentById(session.studentId)) {
+        renderStudentPortal();
+      }
     } catch (err) {}
   }
 });
@@ -302,22 +394,29 @@ function boot() {
   refreshOverdue();
   refreshCategorySelects();
   showFlashToast();
+
   try {
     if (window.location && window.location.protocol === 'file:') {
       var w = document.getElementById('fileWarn');
       if (w) w.classList.remove('hidden');
     }
   } catch (e) {}
+
   session = loadSession();
+
   var isAdminPage = !!document.getElementById('screen-admin');
   var isIndexPage = !!document.getElementById('screen-landing');
+
   if (isAdminPage) {
     if (session.role === 'admin') {
       showScreen('screen-admin');
       switchTab('dashboard', document.querySelector('#screen-admin .tab-btn'));
-    } else showScreen('screen-admin-landing');
+    } else {
+      showScreen('screen-admin-landing');
+    }
     return;
   }
+
   if (isIndexPage) {
     if (session.role === 'student' && studentById(session.studentId)) {
       showScreen('screen-student');
