@@ -1,1 +1,161 @@
-PLACEHOLDER
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UPHSD Molino Library — Admin</title>
+<meta name="description" content="Admin console for UPHSD Molino Campus Library Management System"/>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+<div class="filewarn hidden" id="fileWarn">You opened this file directly — Student and Admin pages can't share data this way. Open this folder with a local server instead (VS Code Live Server, or run <b>python -m http.server</b> here).</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<div class="overlay" id="confirmOverlay">
+  <div class="modal" style="max-width:430px">
+    <h2 id="confirmTitle"></h2>
+    <p class="sub" id="confirmDesc" style="margin-bottom:22px"></p>
+    <div style="display:flex;justify-content:flex-end;gap:10px">
+      <button class="btn btn-outline" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-danger-solid" id="confirmOk">Delete</button>
+    </div>
+  </div>
+</div>
+
+<section class="screen" id="screen-admin-landing">
+  <div style="width:100%;max-width:480px;text-align:center;margin:0 auto;padding:40px 20px">
+    <h1 style="font-size:24px;font-weight:800">UPHSD Molino Library</h1>
+    <p style="color:var(--maroon);font-weight:700;margin:6px 0 24px">Admin Console</p>
+    <div class="card" style="padding:28px;text-align:left">
+      <h2 style="font-size:18px;font-weight:800;margin-bottom:16px">Librarian Login</h2>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div>
+          <label class="lbl">Username</label>
+          <input id="adminUser" placeholder="admin" onkeydown="if(event.key==='Enter')adminLogin()">
+        </div>
+        <div>
+          <label class="lbl">Password</label>
+          <input id="adminPass" type="password" placeholder="••••••" onkeydown="if(event.key==='Enter')adminLogin()">
+        </div>
+        <p id="adminLoginErr" class="err-text hidden"></p>
+        <button class="btn btn-gold" style="width:100%" onclick="adminLogin()">Log In</button>
+        <a href="index.html" class="btn btn-ghost" style="width:100%;text-align:center;text-decoration:none">← Student portal</a>
+      </div>
+      <p style="margin-top:16px;font-size:12px;color:var(--muted)">Default: <b>admin</b> / <b>library123</b></p>
+    </div>
+  </div>
+</section>
+
+<section class="screen hidden" id="screen-admin">
+  <header class="app-header" style="background:#fff;color:var(--ink);border-bottom:1px solid var(--line)">
+    <div class="app-inner">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div>
+          <h1 style="font-size:16px;font-weight:800">UPHSD Molino Library</h1>
+          <p style="margin:0;font-size:12px;color:var(--muted)">Admin Console</p>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="btn btn-gold" onclick="logout()">Log Out</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="tabs" style="margin-bottom:18px;flex-wrap:wrap">
+      <button class="tab-btn active" onclick="switchTab('dashboard', this)">Dashboard</button>
+      <button class="tab-btn" onclick="switchTab('books', this)">Books</button>
+      <button class="tab-btn" onclick="switchTab('students', this)">Students</button>
+      <button class="tab-btn" onclick="switchTab('requests', this)">
+        Requests <span id="reqBadge" class="badge" style="display:none">0</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('borrow', this)">Active Loans</button>
+      <button class="tab-btn" onclick="switchTab('history', this)">History</button>
+    </div>
+
+    <div id="tab-dashboard" class="tab-content active">
+      <div class="stats-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px">
+        <div class="card" style="padding:16px;text-align:center"><div style="font-size:22px;font-weight:800" id="dashBooks">0</div><div style="font-size:12px;color:var(--muted)">Titles</div></div>
+        <div class="card" style="padding:16px;text-align:center"><div style="font-size:22px;font-weight:800" id="dashCopies">0</div><div style="font-size:12px;color:var(--muted)">Total copies</div></div>
+        <div class="card" style="padding:16px;text-align:center"><div style="font-size:22px;font-weight:800" id="dashAvail">0</div><div style="font-size:12px;color:var(--muted)">Available</div></div>
+        <div class="card" style="padding:16px;text-align:center"><div style="font-size:22px;font-weight:800" id="dashStudents">0</div><div style="font-size:12px;color:var(--muted)">Students</div></div>
+        <div class="card" style="padding:16px;text-align:center"><div style="font-size:22px;font-weight:800" id="dashPending">0</div><div style="font-size:12px;color:var(--muted)">Pending</div></div>
+        <div class="card" style="padding:16px;text-align:center"><div style="font-size:22px;font-weight:800" id="dashBorrowed">0</div><div style="font-size:12px;color:var(--muted)">Borrowed</div></div>
+        <div class="card" style="padding:16px;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--danger)" id="dashOverdue">0</div><div style="font-size:12px;color:var(--muted)">Overdue</div></div>
+      </div>
+      <div class="card">
+        <div style="padding:14px 16px;border-bottom:1px solid var(--line)"><strong>Recent activity</strong></div>
+        <div id="dashRecent" style="padding:8px"></div>
+      </div>
+    </div>
+
+    <div id="tab-books" class="tab-content">
+      <div class="card" style="margin-bottom:16px;padding:18px">
+        <strong style="display:block;margin-bottom:12px">Add book</strong>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div><label class="lbl">Title *</label><input id="bTitle"></div>
+          <div><label class="lbl">Author *</label><input id="bAuthor"></div>
+          <div><label class="lbl">Category *</label><select id="bCategory"></select></div>
+          <div><label class="lbl">ISBN</label><input id="bIsbn"></div>
+          <div><label class="lbl">Copies *</label><input id="bCopies" type="number" min="1" value="1"></div>
+          <div style="grid-column:1/-1"><label class="lbl">Description</label><input id="bDesc"></div>
+        </div>
+        <p id="bookErr" class="err-text hidden"></p>
+        <button class="btn btn-gold" style="margin-top:12px" onclick="addBook()">Add Book</button>
+      </div>
+      <div class="card" style="margin-bottom:12px;padding:12px;display:flex;flex-wrap:wrap;gap:10px">
+        <input id="bookSearch" placeholder="Search books..." style="max-width:280px" oninput="renderBooks()">
+        <select id="bookCatFilter" style="width:160px" onchange="renderBooks()"><option value="">All Categories</option></select>
+      </div>
+      <div class="card"><div id="booksTable"></div></div>
+    </div>
+
+    <div id="tab-students" class="tab-content">
+      <div class="card" style="margin-bottom:16px;padding:18px">
+        <strong style="display:block;margin-bottom:12px">Register student</strong>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div><label class="lbl">Full Name *</label><input id="asName"></div>
+          <div><label class="lbl">Student ID *</label><input id="asSid" maxlength="11" oninput="formatSid(this)" placeholder="25-XXXX-XXX"></div>
+          <div><label class="lbl">Password</label><input id="asPass" type="password" placeholder="default: student123"></div>
+          <div><label class="lbl">Year</label><input id="asYear" placeholder="1st Year"></div>
+          <div><label class="lbl">Section</label><input id="asSection" placeholder="A"></div>
+          <div><label class="lbl">Course</label><input id="asCourse" placeholder="BSIT"></div>
+        </div>
+        <p id="asErr" class="err-text hidden"></p>
+        <button class="btn btn-gold" style="margin-top:12px" onclick="adminAddStudent()">Add Student</button>
+      </div>
+      <div class="card" style="margin-bottom:12px;padding:12px">
+        <input id="stuSearch" placeholder="Search students..." style="max-width:280px" oninput="renderStudents()">
+      </div>
+      <div class="card"><div id="studentsTable"></div></div>
+    </div>
+
+    <div id="tab-requests" class="tab-content">
+      <div class="card"><div id="requestsTable"></div></div>
+    </div>
+
+    <div id="tab-borrow" class="tab-content">
+      <div class="card"><div id="borrowTable"></div></div>
+    </div>
+
+    <div id="tab-history" class="tab-content">
+      <div class="card" style="margin-bottom:12px;padding:12px">
+        <select id="histStatus" style="width:180px" onchange="renderHistory()">
+          <option value="">All statuses</option>
+          <option value="pending">Pending</option>
+          <option value="borrowed">Borrowed</option>
+          <option value="overdue">Overdue</option>
+          <option value="returned">Returned</option>
+        </select>
+      </div>
+      <div class="card"><div id="historyTable"></div></div>
+    </div>
+  </main>
+</section>
+
+<script src="common.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
