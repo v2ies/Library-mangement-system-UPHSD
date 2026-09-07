@@ -12,8 +12,6 @@ Admins can manage books, students, approve requests, issue/return books, and vie
 - **Student portal:** https://v2ies.github.io/Library-mangement-system-UPHSD/
 - **Admin console:** https://v2ies.github.io/Library-mangement-system-UPHSD/admin.html
 
-> After the first push, enable Pages: **Settings → Pages → Source: Deploy from a branch → Branch: `main` / folder `/ (root)` → Save**.
-
 ---
 
 ## Features
