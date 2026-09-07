@@ -1,14 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 48" width="280" height="48">
-  <!-- Official-style seal -->
-  <circle cx="24" cy="24" r="21" fill="#6e1220"/>
-  <circle cx="24" cy="24" r="18" fill="#f4e9cd"/>
-  <circle cx="24" cy="24" r="15" fill="#6e1220"/>
-  <!-- Marian / figure motif -->
-  <circle cx="24" cy="19" r="5.5" fill="#f4e9cd"/>
-  <path d="M24 25 L24 34 M19.5 29 L28.5 29" stroke="#f4e9cd" stroke-width="2" stroke-linecap="round"/>
-  <path d="M18 35 Q24 39 30 35" fill="none" stroke="#a9812f" stroke-width="1.4"/>
-  <circle cx="24" cy="24" r="17" fill="none" stroke="#a9812f" stroke-width="1.2"/>
-  <!-- Wordmark -->
-  <text x="54" y="20" font-family="Georgia, 'Times New Roman', Times, serif" font-size="12.5" font-weight="700" fill="#6e1220" letter-spacing="0.8">UNIVERSITY OF PERPETUAL HELP</text>
-  <text x="54" y="36" font-family="Georgia, 'Times New Roman', Times, serif" font-size="11" font-weight="600" fill="#6e1220" letter-spacing="0.4">SYSTEM DALTA · Molino Campus</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 72" width="640" height="72">
+  <rect x="0" y="0" width="640" height="3" fill="#6e1220"/>
+  <rect x="0" y="69" width="640" height="3" fill="#6e1220"/>
+  <circle cx="40" cy="36" r="28" fill="#6e1220"/>
+  <circle cx="40" cy="36" r="24" fill="#f4e9cd"/>
+  <circle cx="40" cy="36" r="20" fill="#6e1220"/>
+  <circle cx="40" cy="30" r="7" fill="#f4e9cd"/>
+  <path d="M40 38 L40 50 M33 43 L47 43" stroke="#f4e9cd" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M32 52 Q40 57 48 52" fill="none" stroke="#a9812f" stroke-width="1.5"/>
+  <circle cx="40" cy="36" r="22" fill="none" stroke="#a9812f" stroke-width="1.3"/>
+  <text x="80" y="34" font-family="Georgia, 'Times New Roman', Times, serif" font-size="18" font-weight="700" fill="#6e1220" letter-spacing="1.2">UNIVERSITY OF PERPETUAL HELP SYSTEM DALTA</text>
+  <text x="80" y="54" font-family="Georgia, 'Times New Roman', Times, serif" font-size="13" font-weight="600" fill="#6e1220">Molino Campus</text>
 </svg>
