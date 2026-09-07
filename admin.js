@@ -75,8 +75,10 @@ function renderBooks() {
   var html = '<table class="data-table"><thead><tr><th>Title</th><th>Author</th><th>Category</th><th>Copies</th><th></th></tr></thead><tbody>';
   for (var i = 0; i < list.length; i++) {
     var b = list[i];
+    var st = catStyle(b.category);
+    var styleStr = (st && st.color) ? ('color:' + st.color) : '';
     html += '<tr><td><strong>' + esc(b.title) + '</strong><br><span style="font-size:12px;color:var(--muted)">' + esc(b.isbn || '') + '</span></td>';
-    html += '<td>' + esc(b.author) + '</td><td><span class="cat-pill" style="' + catStyle(b.category) + '">' + esc(b.category) + '</span></td>';
+    html += '<td>' + esc(b.author) + '</td><td><span class="cat-pill" style="' + styleStr + '">' + esc(b.category) + '</span></td>';
     html += '<td>' + b.availableCopies + ' / ' + b.totalCopies + '</td>';
     html += '<td><button class="btn btn-outline" style="padding:6px 10px;font-size:12px;color:var(--danger)" onclick="deleteBook(\'' + b.id + '\')">Delete</button></td></tr>';
   }
